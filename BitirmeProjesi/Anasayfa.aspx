@@ -11,7 +11,6 @@
                     <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#smallmodal" style="float:left; margin-top:7px; margin-right:3px;">
                           Klasör Oluştur
                       </button>
-                            adasdsad
                       
                                     <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#smallmodal2" style="margin-top:7px;">
                                         Dosya Yükle
