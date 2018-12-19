@@ -118,7 +118,6 @@
     <Content Include="css\login2.css" />
     <Content Include="css\loginregister.css" />
     <Content Include="Deneme.aspx" />
-    <Content Include="desifreli\asd.png" />
     <Content Include="Giris.aspx" />
     <Content Include="HesabiDogrula.aspx" />
     <Content Include="images\admin.jpg" />
@@ -133,7 +132,6 @@
     <Content Include="images\favicon.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo2.png" />
-    <Content Include="image\bootstrap-solid.svg" />
     <Content Include="KayitOl.aspx" />
     <Content Include="Klasorler.aspx" />
     <Content Include="script\login2.js" />
@@ -143,7 +141,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -220,13 +217,6 @@
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="sqlbaglantisi.cs" />
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WebForm2.aspx.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -258,7 +248,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dosyalar\" />
-    <Folder Include="sifreli\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
