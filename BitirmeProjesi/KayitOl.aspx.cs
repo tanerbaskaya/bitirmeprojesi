@@ -103,7 +103,7 @@ namespace BitirmeProjesi
             SmtpClient smp = new SmtpClient();
 
             //mailin gönderileceği adres ve şifresi
-            smp.Credentials = new NetworkCredential("*****@gmail.com", "******");
+            smp.Credentials = new NetworkCredential("******@gmail.com", "******");
             smp.Port = 587;
             smp.Host = "smtp.gmail.com";//gmail üzerinden gönderiliyor.
             smp.EnableSsl = true;
