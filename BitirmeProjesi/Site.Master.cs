@@ -12,5 +12,11 @@ namespace BitirmeProjesi
         protected void Page_Load(object sender, EventArgs e)
         {
         }
+
+        protected void lnk_but_Cikis_Click(object sender, EventArgs e)
+        {
+            Session.RemoveAll();
+            Response.Redirect("Giris.aspx");
+        }
     }
 }

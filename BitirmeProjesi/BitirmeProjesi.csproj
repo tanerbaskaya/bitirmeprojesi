@@ -123,7 +123,6 @@
     <Content Include="css\login.css" />
     <Content Include="css\login2.css" />
     <Content Include="css\loginregister.css" />
-    <Content Include="Deneme.aspx" />
     <Content Include="Giris.aspx" />
     <Content Include="HesabiDogrula.aspx" />
     <Content Include="images\admin.jpg" />
@@ -138,6 +137,7 @@
     <Content Include="images\favicon.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo2.png" />
+    <Content Include="Indirilenler.aspx" />
     <Content Include="KayitOl.aspx" />
     <Content Include="Klasor.aspx" />
     <Content Include="script\login2.js" />
@@ -147,8 +147,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WebForm1.aspx" />
-    <Content Include="WebForm2.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anasayfa.aspx.cs">
@@ -165,13 +163,6 @@
     <Compile Include="Cikis.aspx.designer.cs">
       <DependentUpon>Cikis.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Deneme.aspx.cs">
-      <DependentUpon>Deneme.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Deneme.aspx.designer.cs">
-      <DependentUpon>Deneme.aspx</DependentUpon>
-    </Compile>
     <Compile Include="fonksiyon.cs" />
     <Compile Include="Giris.aspx.cs">
       <DependentUpon>Giris.aspx</DependentUpon>
@@ -186,6 +177,13 @@
     </Compile>
     <Compile Include="HesabiDogrula.aspx.designer.cs">
       <DependentUpon>HesabiDogrula.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Indirilenler.aspx.cs">
+      <DependentUpon>Indirilenler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Indirilenler.aspx.designer.cs">
+      <DependentUpon>Indirilenler.aspx</DependentUpon>
     </Compile>
     <Compile Include="KayitOl.aspx.cs">
       <DependentUpon>KayitOl.aspx</DependentUpon>
@@ -224,20 +222,6 @@
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="sqlbaglantisi.cs" />
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm2.aspx.cs">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm2.aspx.designer.cs">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include=".github\ISSUE_TEMPLATE.md" />

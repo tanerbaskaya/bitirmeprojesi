@@ -22,7 +22,7 @@
                     <div class="page-header float-right">
                         <div class="page-title">
                             <ol class="breadcrumb text-right">
-                                <li><a href="#">Tüm Dosyalarım</a></li>
+                                <li>Tüm Dosyalarım</li>
                             </ol>
                         </div>
                     </div>

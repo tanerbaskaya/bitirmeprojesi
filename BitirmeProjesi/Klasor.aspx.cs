@@ -12,6 +12,7 @@ namespace BitirmeProjesi
 {
     public partial class Klasorler : System.Web.UI.Page
     {
+        static int sayac = 0;
         static List<string> listDosyaYolu = new List<string>();
         static List<string> listKlasorAdi = new List<string>();
         SqlBaglantisi bgl = new SqlBaglantisi();
@@ -267,7 +268,8 @@ namespace BitirmeProjesi
             komutKullaniciBosAlanGuncelle.Parameters.AddWithValue("@p2", Convert.ToInt32(Session["kullanici_id"]));
             komutKullaniciBosAlanGuncelle.ExecuteNonQuery();
 
-            File.Delete(Server.MapPath(dosyaYolu));
+            string klasorYolu = "~/Dosyalar/" + Directory.GetParent(dosyaYolu).Name;
+            Directory.Delete(Server.MapPath(klasorYolu),true);
             if (baglantiSayac == 0)
                 bgl.baglanti.Close();
 
@@ -404,6 +406,47 @@ namespace BitirmeProjesi
             listDosyaYolu.Clear();
             Response.Flush();
         }
+        private void KlasorIndırılmeBilgisiEkle(int klasorId, int ustIndirilenKlasorId, int kullaniciId, int baglantiSayac)
+        {
+            if (baglantiSayac == 0)
+                bgl.baglanti.Open();
+            SqlCommand komutKlasorIndırılmeEkle;
+            if (ustIndirilenKlasorId == 0)
+            {
+                komutKlasorIndırılmeEkle = new SqlCommand("INSERT INTO Tbl_Klasor_Indirilen(indirilen_klasor_adi,indiren_kullanici_id,sahip_kullanici_id,indirilme_tarihi) VALUES(@p1,@p2,@p3,@p4) SELECT SCOPE_IDENTITY();", bgl.baglanti);
+            }
+            else
+            {
+                komutKlasorIndırılmeEkle = new SqlCommand("INSERT INTO Tbl_Klasor_Indirilen(indirilen_klasor_adi,indiren_kullanici_id,sahip_kullanici_id,indirilme_tarihi,ust_indirilen_klasor_id) VALUES(@p1,@p2,@p3,@p4,@p5) SELECT SCOPE_IDENTITY();", bgl.baglanti);
+                komutKlasorIndırılmeEkle.Parameters.AddWithValue("@p5", ustIndirilenKlasorId);
+            }
+            komutKlasorIndırılmeEkle.Parameters.AddWithValue("@p1", IndırılenKlasorAdiGetir(klasorId));
+            komutKlasorIndırılmeEkle.Parameters.AddWithValue("@p2", kullaniciId);
+            komutKlasorIndırılmeEkle.Parameters.AddWithValue("@p3", kullaniciId);
+            komutKlasorIndırılmeEkle.Parameters.AddWithValue("@p4", DateTime.Now);
+            ustIndirilenKlasorId = Convert.ToInt32(komutKlasorIndırılmeEkle.ExecuteScalar());
+
+
+            SqlCommand komutAltKlasorSorgula = new SqlCommand("SELECT klasor_id FROM Tbl_Klasor WHERE ust_klasor_id=@p1 and silinme_durumu=0", bgl.baglanti);
+            komutAltKlasorSorgula.Parameters.AddWithValue("@p1", klasorId);
+            SqlDataReader dr = komutAltKlasorSorgula.ExecuteReader();
+            while (dr.Read())
+            {
+                KlasorIndırılmeBilgisiEkle(Convert.ToInt32(dr[0]), ustIndirilenKlasorId, kullaniciId, 1);
+            }
+
+            SqlCommand komutAltDosyaSorgula = new SqlCommand("SELECT dosya_id FROM Tbl_Dosya WHERE ust_klasor_id=@p1 and silinme_durumu=0", bgl.baglanti);
+            komutAltDosyaSorgula.Parameters.AddWithValue("@p1", klasorId);
+            SqlDataReader dr2 = komutAltDosyaSorgula.ExecuteReader();
+            while (dr2.Read())
+            {
+                DosyaIndırılmeBilgisiEkle(Convert.ToInt32(dr2[0]), ustIndirilenKlasorId, kullaniciId, 1);
+            }
+
+            if (baglantiSayac == 0)
+                bgl.baglanti.Close();
+        }
+
         private bool DosyaIndır(int dosyaId)
         {
             try
@@ -437,17 +480,29 @@ namespace BitirmeProjesi
                 return false;
             }
         }
-        private void DosyaIndırılmeBilgisiEkle(int dosyaId, int kullaniciId)
+        private void DosyaIndırılmeBilgisiEkle(int dosyaId, int ustIndirilenKlasorId, int kullaniciId, int baglantiSayac)
         {
             try
             {
-                bgl.baglanti.Open();
-                SqlCommand komutDosyaIndırılmeEkle = new SqlCommand("INSERT INTO Tbl_Dosya_Indirilen(indiren_kullanici_id,indirilen_dosya_id,indirilme_zamani) VALUES(@p1,@p2,@p3)", bgl.baglanti);
-                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p1", kullaniciId);
-                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p2", dosyaId);
-                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p3", DateTime.Now);
+                if (baglantiSayac == 0)
+                    bgl.baglanti.Open();
+                SqlCommand komutDosyaIndırılmeEkle;
+                if (ustIndirilenKlasorId == 0)
+                {
+                    komutDosyaIndırılmeEkle = new SqlCommand("INSERT INTO Tbl_Dosya_Indirilen(indirilen_dosya_adi,indiren_kullanici_id,sahip_kullanici_id,indirilme_tarihi) VALUES(@p1,@p2,@p3,@p4)", bgl.baglanti);
+                }
+                else
+                {
+                    komutDosyaIndırılmeEkle = new SqlCommand("INSERT INTO Tbl_Dosya_Indirilen(indirilen_dosya_adi,indiren_kullanici_id,sahip_kullanici_id,indirilme_tarihi,ust_indirilen_klasor_id) VALUES(@p1,@p2,@p3,@p4,@p5)", bgl.baglanti);
+                    komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p5", ustIndirilenKlasorId);
+                }
+                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p1", IndırılenDosyaAdiGetir(dosyaId));
+                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p2", kullaniciId);
+                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p3", kullaniciId);
+                komutDosyaIndırılmeEkle.Parameters.AddWithValue("@p4", DateTime.Now);
                 komutDosyaIndırılmeEkle.ExecuteNonQuery();
-                bgl.baglanti.Close();
+                if (baglantiSayac == 0)
+                    bgl.baglanti.Close();
             }
             catch (Exception)
             {
@@ -505,6 +560,23 @@ namespace BitirmeProjesi
             return durum;
         }
 
+        private string IndırılenKlasorAdiGetir(int klasorid)
+        {
+            string klasorAdi;
+            SqlCommand komut_sorgula = new SqlCommand("SELECT klasor_adi FROM Tbl_Klasor WHERE klasor_id=@p1", bgl.baglanti);
+            komut_sorgula.Parameters.AddWithValue("@p1", klasorid);
+            klasorAdi = komut_sorgula.ExecuteScalar().ToString();
+            return klasorAdi;
+        }
+        private string IndırılenDosyaAdiGetir(int dosyaid)
+        {
+            string dosyaAdi;
+            SqlCommand komut_sorgula = new SqlCommand("SELECT dosya_adi FROM Tbl_Dosya WHERE dosya_id=@p1", bgl.baglanti);
+            komut_sorgula.Parameters.AddWithValue("@p1", dosyaid);
+            dosyaAdi = komut_sorgula.ExecuteScalar().ToString();
+            return dosyaAdi;
+        }
+
         //protected void repeater_Klasorler_ItemCommand(object source, RepeaterCommandEventArgs e)
         //{
         //    if (e.CommandName == "KlasorSil")
@@ -523,7 +595,7 @@ namespace BitirmeProjesi
         //    }
         //}
 
-        
+
 
         //protected void repeater_Dosya_ItemCommand(object source, RepeaterCommandEventArgs e)
         //{
@@ -539,7 +611,7 @@ namespace BitirmeProjesi
         //    }
         //}
 
-       
+
 
         protected void repeater_Klasor_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
@@ -564,6 +636,13 @@ namespace BitirmeProjesi
             }
             else if (e.CommandName == "KlasorIndir")
             {
+                if (sayac == 2)
+                    sayac = 0;
+                if (sayac == 0)
+                {
+                    KlasorIndırılmeBilgisiEkle(Convert.ToInt32(e.CommandArgument), 0, Convert.ToInt32(Session["kullanici_id"]), 0);
+                }
+                sayac++;
                 KlasorZip(Convert.ToInt32(e.CommandArgument), KlasorAdiGetir(Convert.ToInt32(e.CommandArgument)));
             }
         }
@@ -584,7 +663,7 @@ namespace BitirmeProjesi
             {
                 if (DosyaIndır(Convert.ToInt32(e.CommandArgument)))
                 {
-                    DosyaIndırılmeBilgisiEkle(Convert.ToInt32(e.CommandArgument), Convert.ToInt32(Session["kullanici_id"]));
+                    DosyaIndırılmeBilgisiEkle(Convert.ToInt32(e.CommandArgument),0,Convert.ToInt32(Session["kullanici_id"]),0);
                 }
             }
         }
