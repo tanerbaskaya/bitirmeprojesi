@@ -1,7 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Anasayfa.aspx.cs" Inherits="BitirmeProjesi.Anasayfa" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Klasor.aspx.cs" Inherits="BitirmeProjesi.Klasorler" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <title>Anasayfa</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="breadcrumbs">
@@ -105,6 +104,8 @@
             <hr />
             <div class="row">
 
+
+
                 <asp:Repeater ID="repeater_Klasor" runat="server" OnItemCommand="repeater_Klasor_ItemCommand">
                     <ItemTemplate>
                         <div class="col-lg-3 col-md-6">
@@ -166,7 +167,7 @@
             <p>Dosyalar</p>
             <hr />
             <div class="row">
-                <asp:Repeater ID="repeater_Dosya" runat="server" OnItemCommand="repeater_Dosya_ItemCommand">
+                <asp:Repeater ID="repeater_Dosya" runat="server" OnItemCommand="repeater_Dosya_ItemCommand1">
                     <ItemTemplate>
                         <div class="col-lg-3 col-md-6">
                             <div class="card">
@@ -210,6 +211,7 @@
             </div>
         </div>
         <!-- .animated -->
+
 
     </div>
 </asp:Content>

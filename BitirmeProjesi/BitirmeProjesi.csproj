@@ -43,6 +43,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.13.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.0\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -133,7 +139,7 @@
     <Content Include="images\logo.png" />
     <Content Include="images\logo2.png" />
     <Content Include="KayitOl.aspx" />
-    <Content Include="Klasorler.aspx" />
+    <Content Include="Klasor.aspx" />
     <Content Include="script\login2.js" />
     <Content Include="script\loginregister.js" />
     <Content Include="SifreUnuttum.aspx" />
@@ -141,6 +147,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -187,12 +194,12 @@
     <Compile Include="KayitOl.aspx.designer.cs">
       <DependentUpon>KayitOl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Klasorler.aspx.cs">
-      <DependentUpon>Klasorler.aspx</DependentUpon>
+    <Compile Include="Klasor.aspx.cs">
+      <DependentUpon>Klasor.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Klasorler.aspx.designer.cs">
-      <DependentUpon>Klasorler.aspx</DependentUpon>
+    <Compile Include="Klasor.aspx.designer.cs">
+      <DependentUpon>Klasor.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SifreUnuttum.aspx.cs">
@@ -217,6 +224,13 @@
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="sqlbaglantisi.cs" />
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebForm2.aspx.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

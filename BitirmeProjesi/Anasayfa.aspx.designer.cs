@@ -49,13 +49,13 @@ namespace BitirmeProjesi {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator1;
         
         /// <summary>
-        /// btn_klasorolustur control.
+        /// btn_Klasorolustur control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_klasorolustur;
+        protected global::System.Web.UI.WebControls.Button btn_Klasorolustur;
         
         /// <summary>
         /// fucDosyaYukle control.
@@ -85,13 +85,22 @@ namespace BitirmeProjesi {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator2;
         
         /// <summary>
-        /// btnDosyaYukle control.
+        /// btn_DosyaYukle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDosyaYukle;
+        protected global::System.Web.UI.WebControls.Button btn_DosyaYukle;
+        
+        /// <summary>
+        /// lbl_KlasorAciklama control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_KlasorAciklama;
         
         /// <summary>
         /// repeater_Klasor control.

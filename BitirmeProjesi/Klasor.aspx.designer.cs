@@ -13,13 +13,22 @@ namespace BitirmeProjesi {
     public partial class Klasorler {
         
         /// <summary>
-        /// txt_klasorolustur control.
+        /// txt_Klasorolustur control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txt_klasorolustur;
+        protected global::System.Web.UI.WebControls.TextBox txt_Klasorolustur;
+        
+        /// <summary>
+        /// txt_KlasorAciklama control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_KlasorAciklama;
         
         /// <summary>
         /// RequiredFieldValidator1 control.
@@ -40,13 +49,13 @@ namespace BitirmeProjesi {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator1;
         
         /// <summary>
-        /// btn_klasorolustur control.
+        /// btn_Klasorolustur control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_klasorolustur;
+        protected global::System.Web.UI.WebControls.Button btn_Klasorolustur;
         
         /// <summary>
         /// fucDosyaYukle control.
@@ -76,22 +85,31 @@ namespace BitirmeProjesi {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator2;
         
         /// <summary>
-        /// btnDosyaYukle control.
+        /// btn_DosyaYukle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDosyaYukle;
+        protected global::System.Web.UI.WebControls.Button btn_DosyaYukle;
         
         /// <summary>
-        /// repeater_Klasorler control.
+        /// lbl_KlasorAciklama control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repeater_Klasorler;
+        protected global::System.Web.UI.WebControls.Label lbl_KlasorAciklama;
+        
+        /// <summary>
+        /// repeater_Klasor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repeater_Klasor;
         
         /// <summary>
         /// repeater_Dosya control.
