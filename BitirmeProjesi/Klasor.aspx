@@ -7,6 +7,8 @@
         <div class="breadcrumbs-inner">
             <div class="row m-0">
                 <div class="col-sm-4">
+                    <% if (Request.QueryString["p"] != "1" && Request.QueryString["p"] != "0")
+                       {%>
                     <div class="page-header float-left">
                         <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#smallmodal" style="float: left; margin-top: 7px; margin-right: 3px;">
                             Klasör Oluştur
@@ -16,12 +18,26 @@
                             Dosya Yükle
                         </button>
                     </div>
+                    <%} %>
                 </div>
                 <div class="col-sm-8">
                     <div class="page-header float-right">
                         <div class="page-title">
                             <ol class="breadcrumb text-right">
-                                <li><a href="#">Tüm Dosyalarım</a></li>
+                                <% if (Request.QueryString["p"] == "1" && Request.QueryString["p"] != "0")
+                                    {
+                                %>
+                                <li><a href="Anasayfa.aspx?p=1">Paylaşımdaki Dosyalar</a><%for (int i = listDizinId.Count - 1; i >= 0; i--) { Response.Write("<a href ='Klasor.aspx?kid=" + listDizinId[i] + "&p=1'>/" + listDizinAdi[i] + "</a>"); } %></li>
+                                <%  }
+                                    else if (Request.QueryString["p"] == "0" && Request.QueryString["p"] != "1")
+                                    {
+                                %>
+                                <li><a href="Anasayfa.aspx?p=0">Gizli Dosyalar</a><%for (int i = listDizinId.Count - 1; i >= 0; i--) { Response.Write("<a href ='Klasor.aspx?kid=" + listDizinId[i] + "&p=0'>/" + listDizinAdi[i] + "</a>"); } %></li>
+                                <%  }
+                                else
+                                {%>
+                                <li><a href="Anasayfa.aspx">Anasayfa</a><%for (int i = listDizinId.Count - 1; i >= 0; i--) { Response.Write("<a href ='Klasor.aspx?kid=" + listDizinId[i] + "'>/" + listDizinAdi[i] + "</a>"); } %></li>
+                                <%}%>
                             </ol>
                         </div>
                     </div>

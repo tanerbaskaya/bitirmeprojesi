@@ -1,10 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Indirilenler.aspx.cs" Inherits="BitirmeProjesi.Indırılenler" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Copkutusu.aspx.cs" Inherits="BitirmeProjesi.Copkutusu" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <title>İndirilenler</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="breadcrumbs">
+  <div class="breadcrumbs">
         <div class="breadcrumbs-inner">
             <div class="row m-0">
                 <div class="col-sm-4">
@@ -13,7 +11,7 @@
                     <div class="page-header float-right">
                         <div class="page-title">
                             <ol class="breadcrumb text-right" style="float:right;">
-                                <li><a href="Indirilenler.aspx">İndirilenler</a><%for (int i = listDizinId.Count-1; i>=0  ; i--) { Response.Write("<a href ='Indirilenler.aspx?kid=" + listDizinId[i] +"'>/" + listDizinAdi[i] + "</a>"); } %></li>
+                                <li><a href="Copkutusu.aspx">Çöp Kutusu</a><%for (int i = listDizinId.Count-1; i>=0  ; i--) { Response.Write("<a href ='Copkutusu.aspx?sid=" + listDizinId[i] +"'>/" + listDizinAdi[i] + "</a>"); } %></li>
                             </ol>
                         </div>
                     </div>
@@ -38,21 +36,27 @@
                                     <div class="stat-widget-five">
                                         <div class="text-left dib">
                                             <div class="stat-text" style="font-size: 15px">
-                                                <asp:LinkButton ID="lnk_but_klasor" runat="server" CommandName="KlasorLink" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"klasor_indirilme_id") %>'>
-                                                    <i class="fa fa-folder-open"></i>&nbsp;<%#DataBinder.Eval(Container.DataItem,"indirilen_klasor_adi") %>
+                                                <asp:LinkButton ID="lnk_but_klasor" runat="server" CommandName="KlasorLink" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"klasor_id") %>'>
+                                                    <i class="fa fa-folder-open"></i>&nbsp;<%#DataBinder.Eval(Container.DataItem,"klasor_adi") %>
                                                 </asp:LinkButton>
                                             </div>
                                             <p></p>
-                                            <div class="stat-heading" style="font-size: 13px;">Sahibi:@<%#KullaniciAdiGetir(DataBinder.Eval(Container.DataItem,"sahip_kullanici_id")) %></div>
-                                            
+                                            <div class="icon-container" style="float:left; width:150px; ">
+                                                <%if (Request.QueryString["sid"] == null)
+                                                    { %>
+                                                <asp:LinkButton ID="lnk_but_klasorgeriyukle" runat="server" CommandName="KlasorGeriYukle" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"klasor_id") %>'>
+                                                    <span class="ti-arrow-left"></span><span class="icon-name">Geri Yükle</span>
+                                                </asp:LinkButton>
+                                                <%} %>
+                                            </div>
 
-                                            <div class="icon-container" style="float:left; ">
-                                                <asp:LinkButton ID="lnk_but_klasorsil" runat="server" CommandName="IndirilenKlasorSil" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"klasor_indirilme_id") %>'>
+                                            <div class="icon-container" style="float:left; width:30px;">
+                                                <asp:LinkButton ID="lnk_but_klasorsil" runat="server" CommandName="KlasorSil" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"klasor_id") %>'>
                                                     <span class="ti-trash"></span>
                                                 </asp:LinkButton>
-
                                             </div>
-                                            <div class="stat-heading" style="float:right;font-size: 13px; width:100px; margin-top:-10px; margin-right:10px;"><%#DataBinder.Eval(Container.DataItem,"indirilme_tarihi") %></div>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -72,19 +76,22 @@
                                     <div class="stat-widget-five">
                                         <div class="text-left dib">
                                             <div class="stat-text" style="font-size: 15px">
-                                                <%#DataBinder.Eval(Container.DataItem,"indirilen_dosya_adi") %>
+                                                <%#DataBinder.Eval(Container.DataItem,"dosya_adi") %>
                                             </div>
                                             <p></p>
-                                            <div class="stat-heading" style="font-size: 13px;">Sahibi:@<%#KullaniciAdiGetir(DataBinder.Eval(Container.DataItem,"sahip_kullanici_id")) %></div>
-                                            
-                                            
-                                            <p></p>
-                                            <div class="icon-container" style="float: left;">
-                                                <asp:LinkButton ID="lnk_but_dosyasil" runat="server" CommandName="IndirilenDosyaSil" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"dosya_indirilme_id") %>'>
+                                            <div class="icon-container" style="float:left; width:150px; ">
+                                                <%if (Request.QueryString["sid"] == null)
+                                                    { %>
+                                                <asp:LinkButton ID="lnk_but_dosyageriyukle" runat="server" CommandName="DosyaGeriYukle" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"dosya_id") %>'>
+                                                    <span class="ti-arrow-left"></span><span class="icon-name">Geri Yükle</span>
+                                                </asp:LinkButton>
+                                                <%} %>
+                                            </div>
+                                            <div class="icon-container" style="float: left; width:30px;">
+                                                <asp:LinkButton ID="lnk_but_dosyasil" runat="server" CommandName="DosyaSil" CommandArgument='<%#DataBinder.Eval(Container.DataItem,"dosya_id") %>'>
                                                     <span class="ti-trash"></span>
                                                 </asp:LinkButton>
                                             </div>
-                                            <div class="stat-heading" style="float:right;font-size: 13px; width:100px; margin-top:-10px; margin-right:10px;"><%#DataBinder.Eval(Container.DataItem,"indirilme_tarihi") %></div>
                                         </div>
                                     </div>
                                 </div>

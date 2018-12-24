@@ -8,21 +8,49 @@
         <div class="breadcrumbs-inner">
             <div class="row m-0">
                 <div class="col-sm-4">
-                    <div class="page-header float-left">
-                        <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#smallmodal" style="float: left; margin-top: 7px; margin-right: 3px;">
+                   <% if (Request.QueryString["p"] != "1" && Request.QueryString["p"] != "0")
+                       {%>
+                    <div class="page-header float-left" style="width:350px;">
+                        <div style="float:left; width:140px;">
+                        <asp:LinkButton ID="LinkButton3" runat="server"  data-toggle="modal" data-target="#smallmodal">
+                        <div class="icon-container" style="float:left;">
+                                    <span class="ti-direction"></span><span class="icon-name">Klasor Oluştur</span>
+                                </div>
+                            </asp:LinkButton>
+                            </div>
+                        <div style="float:left;width:140px;">
+                        <asp:LinkButton ID="LinkButton4" runat="server"  data-toggle="modal" data-target="#smallmodal2">
+                        <div class="icon-container" >
+                                    <span class="ti-upload"></span><span class="icon-name">Dosya Yükle</span>
+                                </div>
+                            </asp:LinkButton>
+                            </div>
+                        <%--<button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#smallmodal" style="float: left; margin-top: 7px; margin-right: 3px;">
                             Klasör Oluştur
                         </button>
 
                         <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#smallmodal2" style="margin-top: 7px;">
                             Dosya Yükle
-                        </button>
+                        </button>--%>
                     </div>
+                    <%} %>
                 </div>
                 <div class="col-sm-8">
                     <div class="page-header float-right">
                         <div class="page-title">
                             <ol class="breadcrumb text-right">
+                                <% if (Request.QueryString["p"] == "1" && Request.QueryString["p"] != "0")
+                                    {%>
+                                <li>Paylaşımdaki Dosyalarım</li>
+                                <%}
+                                    else if (Request.QueryString["p"] == "0" && Request.QueryString["p"] != "1")
+                                    {%>
+                                <li>Gizli Dosyalarım</li>
+                                <%}
+                                else
+                                {%>
                                 <li>Tüm Dosyalarım</li>
+                                <%}%>
                             </ol>
                         </div>
                     </div>
@@ -174,7 +202,7 @@
                                     <div class="stat-widget-five">
                                         <div class="text-left dib">
                                             <div class="stat-text" style="font-size: 15px">
-                                                &nbsp;<%#DataBinder.Eval(Container.DataItem,"dosya_adi") %>
+                                                <%#DataBinder.Eval(Container.DataItem,"dosya_adi") %>
                                             </div>
                                             <p></p>
                                             <div class="stat-heading" style="font-size: 13px"><%#DataBinder.Eval(Container.DataItem,"olusturma_tarihi") %></div>

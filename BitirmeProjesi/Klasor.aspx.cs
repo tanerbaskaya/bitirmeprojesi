@@ -13,6 +13,8 @@ namespace BitirmeProjesi
     public partial class Klasorler : System.Web.UI.Page
     {
         static int sayac = 0;
+        public static List<string> listDizinAdi = new List<string>();
+        public static List<int> listDizinId = new List<int>();
         static List<string> listDosyaYolu = new List<string>();
         static List<string> listKlasorAdi = new List<string>();
         SqlBaglantisi bgl = new SqlBaglantisi();
@@ -30,8 +32,30 @@ namespace BitirmeProjesi
             { 
                 if(KlasorSorgula(Request.QueryString["kid"],Convert.ToInt32(Session["kullanici_id"])))
                 {
-                    KlasorListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]));
-                    DosyaListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]));
+                    if (Request.QueryString["p"] == "1" && Request.QueryString["p"] != "0")
+                    {
+                        PaylasimDurumunaGoreKlasorListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]),1);
+                        PaylasimDurumunaGoreDosyaListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]),1);
+                        listDizinAdi.Clear();
+                        listDizinId.Clear();
+                        DizinListeleme(Convert.ToInt32(Request.QueryString["kid"]), Convert.ToInt32(Session["kullanici_id"]), 0);
+                    }
+                    else if (Request.QueryString["p"] == "0" && Request.QueryString["p"] != "1")
+                    {
+                        PaylasimDurumunaGoreKlasorListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]),1);
+                        PaylasimDurumunaGoreDosyaListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]),1);
+                        listDizinAdi.Clear();
+                        listDizinId.Clear();
+                        DizinListeleme(Convert.ToInt32(Request.QueryString["kid"]), Convert.ToInt32(Session["kullanici_id"]), 0);
+                    }
+                    else
+                    {
+                        KlasorListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]));
+                        DosyaListele(Request.QueryString["kid"], Convert.ToInt32(Session["kullanici_id"]));
+                        listDizinAdi.Clear();
+                        listDizinId.Clear();
+                        DizinListeleme(Convert.ToInt32(Request.QueryString["kid"]), Convert.ToInt32(Session["kullanici_id"]), 0);
+                    }
                 }
                 else
                 {
@@ -49,9 +73,29 @@ namespace BitirmeProjesi
             try
             {
                 bgl.baglanti.Open();
-                SqlCommand komut_klasorlistele = new SqlCommand("SELECT * FROM Tbl_Klasor WHERE ust_klasor_id=@p1 and sahip_kullanici_id=@p2", bgl.baglanti);
+                SqlCommand komut_klasorlistele = new SqlCommand("SELECT * FROM Tbl_Klasor WHERE ust_klasor_id=@p1 and sahip_kullanici_id=@p2 and silinme_durumu=0", bgl.baglanti);
                 komut_klasorlistele.Parameters.AddWithValue("@p1", klasorId);
                 komut_klasorlistele.Parameters.AddWithValue("@p2", kullaniciId);
+                SqlDataReader sqlread = komut_klasorlistele.ExecuteReader();
+                repeater_Klasor.DataSource = sqlread;
+                repeater_Klasor.DataBind();
+                sqlread.Close();
+                bgl.baglanti.Close();
+            }
+            catch (Exception)
+            {
+                Response.Write("<script LANGUAGE='JavaScript' >alert('Klasör Listelerken Hata Oluştu')</script>");
+            }
+        }
+        private void PaylasimDurumunaGoreKlasorListele(string klasorId, int kullaniciId, int paylasimDurumu)
+        {
+            try
+            {
+                bgl.baglanti.Open();
+                SqlCommand komut_klasorlistele = new SqlCommand("SELECT * FROM Tbl_Klasor WHERE ust_klasor_id=@p1 and sahip_kullanici_id=@p2 and silinme_durumu=0 and paylasim_durumu=@p3", bgl.baglanti);
+                komut_klasorlistele.Parameters.AddWithValue("@p1", klasorId);
+                komut_klasorlistele.Parameters.AddWithValue("@p2", kullaniciId);
+                komut_klasorlistele.Parameters.AddWithValue("@p3", paylasimDurumu);
                 SqlDataReader sqlread = komut_klasorlistele.ExecuteReader();
                 repeater_Klasor.DataSource = sqlread;
                 repeater_Klasor.DataBind();
@@ -69,7 +113,7 @@ namespace BitirmeProjesi
             {
                 int durum;
                 bgl.baglanti.Open();
-                SqlCommand komut_sorgula = new SqlCommand("SELECT count(*) FROM Tbl_Klasor WHERE klasor_id=@p1 and sahip_kullanici_id=@p2", bgl.baglanti);
+                SqlCommand komut_sorgula = new SqlCommand("SELECT count(*) FROM Tbl_Klasor WHERE klasor_id=@p1 and sahip_kullanici_id=@p2 and silinme_durumu=0", bgl.baglanti);
                 komut_sorgula.Parameters.AddWithValue("@p1", klasorId);
                 komut_sorgula.Parameters.AddWithValue("@p2", kullaniciId);
                 durum = Convert.ToInt32(komut_sorgula.ExecuteScalar());
@@ -89,13 +133,12 @@ namespace BitirmeProjesi
                 return false;
             }
         }
-
         private void DosyaListele(string klasorId, int kullaniciId)
         {
             try
             {
                 bgl.baglanti.Open();
-                SqlCommand komut_dosyalistele = new SqlCommand("SELECT * FROM Tbl_Dosya WHERE ust_klasor_id=@p1 and sahip_kullanici_id=@p2", bgl.baglanti);
+                SqlCommand komut_dosyalistele = new SqlCommand("SELECT * FROM Tbl_Dosya WHERE ust_klasor_id=@p1 and sahip_kullanici_id=@p2 and silinme_durumu=0", bgl.baglanti);
                 komut_dosyalistele.Parameters.AddWithValue("@p1", klasorId);
                 komut_dosyalistele.Parameters.AddWithValue("@p2", kullaniciId);
                 SqlDataReader sqlread = komut_dosyalistele.ExecuteReader();
@@ -109,6 +152,51 @@ namespace BitirmeProjesi
                 Response.Write("<script LANGUAGE='JavaScript' >alert('Dosya Listelerken Hata Oluştu')</script>");
             }
         }
+        private void PaylasimDurumunaGoreDosyaListele(string klasorId, int kullaniciId, int paylasimDurumu)
+        {
+            try
+            {
+                bgl.baglanti.Open();
+                SqlCommand komut_dosyalistele = new SqlCommand("SELECT * FROM Tbl_Dosya WHERE ust_klasor_id=@p1 and sahip_kullanici_id=@p2 and silinme_durumu=0 and paylasim_durumu=@p3", bgl.baglanti);
+                komut_dosyalistele.Parameters.AddWithValue("@p1", klasorId);
+                komut_dosyalistele.Parameters.AddWithValue("@p2", kullaniciId);
+                komut_dosyalistele.Parameters.AddWithValue("@p3", paylasimDurumu);
+                SqlDataReader sqlread = komut_dosyalistele.ExecuteReader();
+                repeater_Dosya.DataSource = sqlread;
+                repeater_Dosya.DataBind();
+                sqlread.Close();
+                bgl.baglanti.Close();
+            }
+            catch (Exception)
+            {
+                Response.Write("<script LANGUAGE='JavaScript' >alert('Dosya Listelerken Hata Oluştu')</script>");
+            }
+        }
+        public void DizinListeleme(int ustKlasorId, int kullaniciId, int baglantiSayac)
+        {
+            if(baglantiSayac==0)
+                bgl.baglanti.Open();
+            SqlCommand komutDizinSorgula = new SqlCommand("SELECT klasor_adi,klasor_id FROM Tbl_Klasor WHERE klasor_id=@p1 and sahip_kullanici_id=@p2 and silinme_durumu=0", bgl.baglanti);
+            komutDizinSorgula.Parameters.AddWithValue("@p1", ustKlasorId);
+            komutDizinSorgula.Parameters.AddWithValue("@p2", kullaniciId);
+            SqlDataReader dr = komutDizinSorgula.ExecuteReader();
+            while(dr.Read())
+            {
+                 listDizinAdi.Add(dr[0].ToString());
+                 listDizinId.Add(Convert.ToInt32(dr[1]));
+            }
+
+            SqlCommand komutUstDizinSorgula = new SqlCommand("SELECT ust_klasor_id FROM Tbl_Klasor WHERE klasor_id=@p1 and sahip_kullanici_id=@p2 and ust_klasor_id is not null and silinme_durumu=0", bgl.baglanti);
+            komutUstDizinSorgula.Parameters.AddWithValue("@p1", ustKlasorId);
+            komutUstDizinSorgula.Parameters.AddWithValue("@p2", kullaniciId);
+            SqlDataReader dr2 = komutUstDizinSorgula.ExecuteReader();
+            while (dr2.Read())
+            {
+                DizinListeleme(Convert.ToInt32(dr2[0]), kullaniciId, 1);
+            }
+            if (baglantiSayac == 0)
+                bgl.baglanti.Close();
+        }
 
 
         //Klasor ekleme ve dosya yükleme fonksiyonları
@@ -117,14 +205,16 @@ namespace BitirmeProjesi
             try
             {
                 bgl.baglanti.Open();
-                SqlCommand komut_klasorolustur = new SqlCommand("INSERT INTO Tbl_Klasor(klasor_adi,klasor_aciklama,ust_klasor_id,sahip_kullanici_id,paylasim_durumu,olusturma_tarihi,silinme_durumu) VALUES(@p1,@p2,@p3,@p4,@p5,@p6,@p7) ", bgl.baglanti);
+                Guid paylasimKodu = Guid.NewGuid();
+                SqlCommand komut_klasorolustur = new SqlCommand("INSERT INTO Tbl_Klasor(klasor_adi,klasor_aciklama,ust_klasor_id,sahip_kullanici_id,paylasim_durumu,paylasim_kodu,olusturma_tarihi,silinme_durumu) VALUES(@p1,@p2,@p3,@p4,@p5,@p6,@p7,@p8) ", bgl.baglanti);
                 komut_klasorolustur.Parameters.AddWithValue("@p1", klasorAdi);
                 komut_klasorolustur.Parameters.AddWithValue("@p2", klasorAciklama);
                 komut_klasorolustur.Parameters.AddWithValue("@p3", ustKlasorId);
                 komut_klasorolustur.Parameters.AddWithValue("@p4", kullaniciId);
                 komut_klasorolustur.Parameters.AddWithValue("@p5", 0);
-                komut_klasorolustur.Parameters.AddWithValue("@p6", DateTime.Now);
-                komut_klasorolustur.Parameters.AddWithValue("@p7", 0);
+                komut_klasorolustur.Parameters.AddWithValue("@p6", paylasimKodu);
+                komut_klasorolustur.Parameters.AddWithValue("@p7", DateTime.Now);
+                komut_klasorolustur.Parameters.AddWithValue("@p8", 0);
                 komut_klasorolustur.ExecuteNonQuery();
                 bgl.baglanti.Close();
                 Page.Response.Redirect(Page.Request.Url.ToString(), true);
@@ -144,16 +234,18 @@ namespace BitirmeProjesi
             dosyayolu = dosyaBenzersizKlasorAdi + "/" + fucDosyaYukle.PostedFile.FileName.ToString();
             fucDosyaYukle.SaveAs(Server.MapPath(dosyayolu));
 
+            Guid paylasimKodu = Guid.NewGuid();
             bgl.baglanti.Open();
-            SqlCommand komutDosyaYukle = new SqlCommand("INSERT INTO Tbl_Dosya(dosya_adi,dosya_yolu,dosya_boyutu,ust_klasor_id,sahip_kullanici_id,paylasim_durumu,olusturma_tarihi,silinme_durumu) VALUES(@p1,@p2,@p3,@p4,@p5,@p6,@p7,@p8) ", bgl.baglanti);
+            SqlCommand komutDosyaYukle = new SqlCommand("INSERT INTO Tbl_Dosya(dosya_adi,dosya_yolu,dosya_boyutu,ust_klasor_id,sahip_kullanici_id,paylasim_durumu,paylasim_kodu,olusturma_tarihi,silinme_durumu) VALUES(@p1,@p2,@p3,@p4,@p5,@p6,@p7,@p8,@p9) ", bgl.baglanti);
             komutDosyaYukle.Parameters.AddWithValue("@p1", fucDosyaYukle.PostedFile.FileName);
             komutDosyaYukle.Parameters.AddWithValue("@p2", dosyayolu);
             komutDosyaYukle.Parameters.AddWithValue("@p3", fucDosyaYukle.PostedFile.ContentLength);
             komutDosyaYukle.Parameters.AddWithValue("@p4", ustKlasorId);
             komutDosyaYukle.Parameters.AddWithValue("@p5", kullaniciId);
             komutDosyaYukle.Parameters.AddWithValue("@p6", 0);
-            komutDosyaYukle.Parameters.AddWithValue("@p7", DateTime.Now);
-            komutDosyaYukle.Parameters.AddWithValue("@p8", 0);
+            komutDosyaYukle.Parameters.AddWithValue("@p7", paylasimKodu);
+            komutDosyaYukle.Parameters.AddWithValue("@p8", DateTime.Now);
+            komutDosyaYukle.Parameters.AddWithValue("@p9", 0);
             komutDosyaYukle.ExecuteNonQuery();
             bgl.baglanti.Close();
 
@@ -228,7 +320,7 @@ namespace BitirmeProjesi
                 DosyaSil(Convert.ToInt32(dr[0]), 1);
             }
 
-            SqlCommand komutKlasorSil = new SqlCommand("DELETE FROM Tbl_Klasor WHERE klasor_id=@p1", bgl.baglanti);
+            SqlCommand komutKlasorSil = new SqlCommand("UPDATE Tbl_Klasor SET silinme_durumu=1 WHERE klasor_id=@p1", bgl.baglanti);
             komutKlasorSil.Parameters.AddWithValue("@p1", klasorId);
             komutKlasorSil.ExecuteNonQuery();
 
@@ -245,31 +337,13 @@ namespace BitirmeProjesi
         }
         public void DosyaSil(int dosyaId, int baglantiSayac)
         {
-            string dosyaYolu = null;
-            int dosyaBoyutu = 0;
             if (baglantiSayac == 0)
                 bgl.baglanti.Open();
-            SqlCommand komutDosyasorgula = new SqlCommand("SELECT dosya_yolu,dosya_boyutu FROM Tbl_Dosya WHERE dosya_id=@p1", bgl.baglanti);
-            komutDosyasorgula.Parameters.AddWithValue("@p1", dosyaId);
-            SqlDataReader dr = komutDosyasorgula.ExecuteReader();
-            while (dr.Read())
-            {
-                dosyaYolu = dr[0].ToString();
-                dosyaBoyutu = Convert.ToInt32(dr[1]);
-            }
-
-            SqlCommand komutDosyaSil = new SqlCommand("DELETE FROM Tbl_Dosya WHERE dosya_id=@p1", bgl.baglanti);
+            
+            SqlCommand komutDosyaSil = new SqlCommand("UPDATE Tbl_Dosya SET silinme_durumu=1 WHERE dosya_id=@p1", bgl.baglanti);
             komutDosyaSil.Parameters.AddWithValue("@p1", dosyaId);
             komutDosyaSil.ExecuteNonQuery();
 
-
-            SqlCommand komutKullaniciBosAlanGuncelle = new SqlCommand("UPDATE Tbl_Kullanici SET bos_alan=bos_alan+@p1 WHERE kullanici_id=@p2", bgl.baglanti);
-            komutKullaniciBosAlanGuncelle.Parameters.AddWithValue("@p1", Convert.ToInt32(dosyaBoyutu));
-            komutKullaniciBosAlanGuncelle.Parameters.AddWithValue("@p2", Convert.ToInt32(Session["kullanici_id"]));
-            komutKullaniciBosAlanGuncelle.ExecuteNonQuery();
-
-            string klasorYolu = "~/Dosyalar/" + Directory.GetParent(dosyaYolu).Name;
-            Directory.Delete(Server.MapPath(klasorYolu),true);
             if (baglantiSayac == 0)
                 bgl.baglanti.Close();
 
@@ -298,11 +372,10 @@ namespace BitirmeProjesi
         {
             if (baglantiSayac == 0)
                 bgl.baglanti.Open();
-            Guid paylasimKodu = Guid.NewGuid();
-            SqlCommand komut_gizlilikguncelle = new SqlCommand("UPDATE Tbl_Klasor SET paylasim_durumu=@p1, paylasim_kodu=@p2 WHERE klasor_id=@p3", bgl.baglanti);
+            
+            SqlCommand komut_gizlilikguncelle = new SqlCommand("UPDATE Tbl_Klasor SET paylasim_durumu=@p1 WHERE klasor_id=@p2", bgl.baglanti);
             komut_gizlilikguncelle.Parameters.AddWithValue("@p1", durum);
-            komut_gizlilikguncelle.Parameters.AddWithValue("@p2", paylasimKodu);
-            komut_gizlilikguncelle.Parameters.AddWithValue("@p3", klasorId);
+            komut_gizlilikguncelle.Parameters.AddWithValue("@p2", klasorId);
             komut_gizlilikguncelle.ExecuteNonQuery();
             komut_gizlilikguncelle.Dispose();
 
@@ -340,11 +413,10 @@ namespace BitirmeProjesi
         private void DosyaPaylasimDurumuDegistir(int durum, int dosyaId)
         {
             bgl.baglanti.Open();
-            Guid paylasimKodu = Guid.NewGuid();
-            SqlCommand komut_gizlilikguncelle = new SqlCommand("UPDATE Tbl_Dosya SET paylasim_durumu=@p1,paylasim_kodu=@p2 WHERE dosya_id=@p3", bgl.baglanti);
+
+            SqlCommand komut_gizlilikguncelle = new SqlCommand("UPDATE Tbl_Dosya SET paylasim_durumu=@p1 WHERE dosya_id=@p2", bgl.baglanti);
             komut_gizlilikguncelle.Parameters.AddWithValue("@p1", durum);
-            komut_gizlilikguncelle.Parameters.AddWithValue("@p2", paylasimKodu);
-            komut_gizlilikguncelle.Parameters.AddWithValue("@p3", dosyaId);
+            komut_gizlilikguncelle.Parameters.AddWithValue("@p2", dosyaId);
             komut_gizlilikguncelle.ExecuteNonQuery();
 
             bgl.baglanti.Close();
@@ -627,7 +699,18 @@ namespace BitirmeProjesi
             }
             else if (e.CommandName == "KlasorLink")
             {
-                Response.Redirect("/Klasor.aspx?kid=" + e.CommandArgument + "&kad=" + KlasorAdiGetir(Convert.ToInt32(e.CommandArgument)));
+                if (Request.QueryString["p"] == "1" && Request.QueryString["p"] != "0")
+                {
+                    Response.Redirect("/Klasor.aspx?kid=" + e.CommandArgument + "&p=1");
+                }
+                else if (Request.QueryString["p"] == "0" && Request.QueryString["p"] != "1")
+                {
+                    Response.Redirect("/Klasor.aspx?kid=" + e.CommandArgument + "&p=0");
+                }
+                else
+                {
+                    Response.Redirect("/Klasor.aspx?kid=" + e.CommandArgument);
+                }
             }
             else if (e.CommandName == "KlasorAciklama")
             {

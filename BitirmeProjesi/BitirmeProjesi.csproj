@@ -120,6 +120,7 @@
     <Content Include="assets\js\widgets.js" />
     <Content Include="assets\scss\style.css" />
     <Content Include="Cikis.aspx" />
+    <Content Include="Copkutusu.aspx" />
     <Content Include="css\login.css" />
     <Content Include="css\login2.css" />
     <Content Include="css\loginregister.css" />
@@ -162,6 +163,13 @@
     </Compile>
     <Compile Include="Cikis.aspx.designer.cs">
       <DependentUpon>Cikis.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Copkutusu.aspx.cs">
+      <DependentUpon>Copkutusu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Copkutusu.aspx.designer.cs">
+      <DependentUpon>Copkutusu.aspx</DependentUpon>
     </Compile>
     <Compile Include="fonksiyon.cs" />
     <Compile Include="Giris.aspx.cs">

@@ -11,6 +11,8 @@ namespace BitirmeProjesi
     public partial class Indırılenler : System.Web.UI.Page
     {
         SqlBaglantisi bgl = new SqlBaglantisi();
+        public static List<string> listDizinAdi = new List<string>();
+        public static List<int> listDizinId = new List<int>();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["kullanici_id"] == null)
@@ -21,9 +23,14 @@ namespace BitirmeProjesi
             {
                 IndirilenAltKlasorleriListele(Convert.ToInt32(Session["kullanici_id"]), Convert.ToInt32(Request.QueryString["kid"]));
                 IndirilenAltDosyaListele(Convert.ToInt32(Session["kullanici_id"]), Convert.ToInt32(Request.QueryString["kid"]));
+                listDizinAdi.Clear();
+                listDizinId.Clear();
+                DizinListeleme(Convert.ToInt32(Request.QueryString["kid"]), Convert.ToInt32(Session["kullanici_id"]), 0);
             }
             else
             {
+                listDizinAdi.Clear();
+                listDizinId.Clear();
                 IndirilenKlasorleriListele(Convert.ToInt32(Session["kullanici_id"]));
                 IndirilenDosyaListele(Convert.ToInt32(Session["kullanici_id"]));
             }
@@ -65,6 +72,31 @@ namespace BitirmeProjesi
             {
                 Response.Write("<script LANGUAGE='JavaScript' >alert('Dosya Listelerken Hata Oluştu')</script>");
             }
+        }
+        public void DizinListeleme(int ustKlasorId, int kullaniciId, int baglantiSayac)
+        {
+            if (baglantiSayac == 0)
+                bgl.baglanti.Open();
+            SqlCommand komutDizinSorgula = new SqlCommand("SELECT indirilen_klasor_adi,klasor_indirilme_id FROM Tbl_Klasor_Indirilen WHERE klasor_indirilme_id=@p1 and indiren_kullanici_id=@p2", bgl.baglanti);
+            komutDizinSorgula.Parameters.AddWithValue("@p1", ustKlasorId);
+            komutDizinSorgula.Parameters.AddWithValue("@p2", kullaniciId);
+            SqlDataReader dr = komutDizinSorgula.ExecuteReader();
+            while (dr.Read())
+            {
+                listDizinAdi.Add(dr[0].ToString());
+                listDizinId.Add(Convert.ToInt32(dr[1]));
+            }
+
+            SqlCommand komutUstDizinSorgula = new SqlCommand("SELECT ust_indirilen_klasor_id FROM Tbl_Klasor_Indirilen WHERE klasor_indirilme_id=@p1 and indiren_kullanici_id=@p2 and ust_indirilen_klasor_id is not null", bgl.baglanti);
+            komutUstDizinSorgula.Parameters.AddWithValue("@p1", ustKlasorId);
+            komutUstDizinSorgula.Parameters.AddWithValue("@p2", kullaniciId);
+            SqlDataReader dr2 = komutUstDizinSorgula.ExecuteReader();
+            while (dr2.Read())
+            {
+                DizinListeleme(Convert.ToInt32(dr2[0]), kullaniciId, 1);
+            }
+            if (baglantiSayac == 0)
+                bgl.baglanti.Close();
         }
 
         //Alt klasor ve dosya listeleme
