@@ -70,6 +70,33 @@
             height: 160px;
         }
     </style>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <script language="javascript" type="text/javascript">
+    $(function () {
+        $('#<%=txt_kisiarama.ClientID%>').autocomplete({
+    source: function (request, response) {
+        $.ajax({
+            url: "Anasayfa.aspx/GetirKisi",
+            data: "{ 'pre':'" + request.term + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                response($.map(data.d, function (item) {
+                    return { value: item }
+                }))
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+    }
+});
+});
+</script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -137,8 +164,8 @@
             <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="./"><img src="images/logo.png" alt="Logo"></a>
-                    <a class="navbar-brand hidden" href="./"><img src="images/logo2.png" alt="Logo"></a>
+                    <a class="navbar-brand" href="./"><img src="images/logo.png" alt="Logo"/></a>
+                    <a class="navbar-brand hidden" href="./"><img src="images/logo2.png" alt="Logo"/></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
             </div>
@@ -149,8 +176,9 @@
                         Alan:<span class="count"><%Response.Write(toplamAlan); %></span>/<span class="count"><%Response.Write(bosAlan); %></span>MB
                         <button class="search-trigger"><i class="fa fa-search"></i></button>
                         <div class="form-inline">
-                            <div class="search-form">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search"/>
+                            <div class="search-form" >
+                                <asp:TextBox style="margin-left:120px; float:left; width:210px;" ID="txt_kisiarama" runat="server"  CssClass="textboxAuto" class="form-control mr-sm-2" placeholder="Kişi Arama..."></asp:TextBox>
+                                <asp:LinkButton style="float:left; margin-top:15px;" ID="lnk_but_kullanici_arama" runat="server" OnClick="lnk_but_kullanici_arama_Click"><span class="fa fa-search"></span></asp:LinkButton>
                                 <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
                             </div>
                         </div>
@@ -182,7 +210,7 @@
 
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="images/admin.jpg" alt="User Avatar">
+                            <img class="user-avatar rounded-circle" src="images/admin.jpg" alt="User Avatar"/>
                         </a>
 
                         <div class="user-menu dropdown-menu">

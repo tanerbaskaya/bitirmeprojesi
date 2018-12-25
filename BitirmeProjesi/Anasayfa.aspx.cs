@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Services;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Ionic.Zip;
@@ -680,6 +682,28 @@ namespace BitirmeProjesi
             {
                 KlasorOlustur(txt_Klasorolustur.Text.ToString(), txt_KlasorAciklama.Text.ToString(), Convert.ToInt32(Session["kullanici_id"]));
             }
+        }
+
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public static List<String> GetirKisi(string pre)
+        {
+            List<string> tumKisiler = new List<string>();
+            using (SqlConnection con = new SqlConnection("Data Source=DESKTOP-H1JMK6K;Initial Catalog=BitirmeDb;Integrated Security=True;MultipleActiveResultSets=True"))
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "select kullanici_adi from Tbl_Kullanici where " +
+            "kullanici_adi like '%' + @SearchText + '%'";
+                cmd.Parameters.AddWithValue("@SearchText", pre);
+                cmd.Connection = con;
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    tumKisiler.Add(rdr[0].ToString());
+                }
+            }
+            return tumKisiler;
         }
     }
 }

@@ -40,6 +40,24 @@ namespace BitirmeProjesi {
         protected global::System.Web.UI.WebControls.LinkButton lnk_but_Cikis;
         
         /// <summary>
+        /// txt_kisiarama control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_kisiarama;
+        
+        /// <summary>
+        /// lnk_but_kullanici_arama control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnk_but_kullanici_arama;
+        
+        /// <summary>
         /// ContentPlaceHolder1 control.
         /// </summary>
         /// <remarks>

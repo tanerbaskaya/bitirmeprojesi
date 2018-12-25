@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Services;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -44,6 +46,24 @@ namespace BitirmeProjesi
             }
             bgl.baglanti.Close();
         }
+        
+        protected void lnk_but_kullanici_arama_Click(object sender, EventArgs e)
+        {
+            int kontrol = 0;
+            bgl.baglanti.Open();
+            SqlCommand komutKullaniciSorgula = new SqlCommand("SELECT Count(*) FROM Tbl_Kullanici WHERE kullanici_adi=@p1", bgl.baglanti);
+            komutKullaniciSorgula.Parameters.AddWithValue("@p1", txt_kisiarama.Text.ToString());
+            kontrol = Convert.ToInt32(komutKullaniciSorgula.ExecuteScalar());
 
+            bgl.baglanti.Close();
+            if (kontrol == 1)
+            {
+                Response.Redirect("Profil.aspx?kadi=" + txt_kisiarama.Text.ToString());
+            }
+            else
+            {
+                Response.Redirect("Anasayfa.aspx");
+            }
+        }
     }
 }
